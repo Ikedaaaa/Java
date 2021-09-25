@@ -6,6 +6,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Entity
 @Table(name="Clientes")
@@ -16,8 +19,17 @@ public class Cliente {
 	@Column(name="idcliente")
 	private Long id;
 	
+	@NotBlank
+	@Size(max=255)
 	private String nome;
+	
+	@NotBlank
+	@Email
+	@Size(max=255)
 	private String email;
+	
+	@NotBlank
+	@Size(max=255)
 	private String telefone;
 	
 	public Long getId() {
