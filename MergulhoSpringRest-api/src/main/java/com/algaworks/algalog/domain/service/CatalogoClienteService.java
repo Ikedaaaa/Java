@@ -17,6 +17,11 @@ public class CatalogoClienteService {
 		this.clienteRepository = clienteRepository;
 	}
 	
+	public Cliente buscar(Long idcliente) {
+		return clienteRepository.findById(idcliente)
+				.orElseThrow(() -> new NegocioException("Cliente não encontrado"));
+	}
+	
 	@Transactional
 	public Cliente salvar(Cliente cliente) {
 		boolean emailEmUso = clienteRepository.findByEmail(cliente.getEmail())
