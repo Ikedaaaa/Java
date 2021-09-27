@@ -14,7 +14,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.groups.ConvertGroup;
+import javax.validation.groups.Default;
 
+import com.algaworks.algalog.domain.ValidationGroups;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
@@ -27,13 +32,19 @@ public class Entrega {
 	@Column(name="identrega")
 	private Long Id;
 	
+	@Valid
+	@ConvertGroup(from=Default.class, to=ValidationGroups.ClienteId.class)
+	@NotNull
 	@ManyToOne
 	@JoinColumn(name="idcliente")
 	private Cliente cliente;
 	
+	@Valid
+	@NotNull
 	@Embedded
 	private Destinatario destinatario;
 	
+	@NotNull
 	private BigDecimal taxa;
 	
 	@JsonProperty(access = Access.READ_ONLY)
