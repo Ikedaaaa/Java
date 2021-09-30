@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.algalog.api.model.DestinatarioModel;
+import com.algaworks.algalog.api.assembler.EntregaAssembler;
 import com.algaworks.algalog.api.model.EntregaModel;
+import com.algaworks.algalog.api.model.input.EntregaInput;
 import com.algaworks.algalog.domain.model.Entrega;
 import com.algaworks.algalog.domain.repository.EntregaRepository;
 import com.algaworks.algalog.domain.service.SolicitacaoEntregaService;
@@ -26,46 +27,37 @@ public class EntregaController {
 
 	private EntregaRepository entregaRepository;
 	private SolicitacaoEntregaService solicitacaoEntregaService;
-
-	public EntregaController(EntregaRepository entregaRepository, SolicitacaoEntregaService solicitacaoEntregaService) {
-		super();
-		this.solicitacaoEntregaService = solicitacaoEntregaService;
-		this.entregaRepository = entregaRepository;
-	}
+	private EntregaAssembler entregaAssembler;
 	
+	public EntregaController(EntregaRepository entregaRepository, SolicitacaoEntregaService solicitacaoEntregaService,
+			EntregaAssembler entregaAssembler) {
+		super();
+		this.entregaRepository = entregaRepository;
+		this.solicitacaoEntregaService = solicitacaoEntregaService;
+		this.entregaAssembler = entregaAssembler;
+	}
+
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Entrega solicitar(@Valid @RequestBody Entrega entrega) {
-		if ((entrega.getDestinatario().getComplemento() == null) || (entrega.getDestinatario().getComplemento() == "")) {
-			entrega.getDestinatario().setComplemento("Não informado");
+	public EntregaModel solicitar(@Valid @RequestBody EntregaInput entregaInput) {
+		Entrega novaEntrega = entregaAssembler.toEntity(entregaInput);
+		Entrega entregaSolicitada = solicitacaoEntregaService.solicitar(novaEntrega);
+		
+		if ((entregaSolicitada.getDestinatario().getComplemento() == null) || (entregaSolicitada.getDestinatario().getComplemento() == "")) {
+			entregaSolicitada.getDestinatario().setComplemento("Não informado");
 		}
-		return solicitacaoEntregaService.solicitar(entrega); //complemento na base está como not null
+		return entregaAssembler.toModel(solicitacaoEntregaService.solicitar(entregaSolicitada)); //complemento na base está como not null
 	}
 	
 	@GetMapping
-	public List<Entrega> listar() {
-		return entregaRepository.findAll();
+	public List<EntregaModel> listar() {
+		return entregaAssembler.toColletionModel(entregaRepository.findAll());
 	}
 	
 	@GetMapping("/{identrega}")
 	public ResponseEntity<EntregaModel> buscar(@PathVariable Long identrega) {
 		return entregaRepository.findById(identrega)
-				.map(entrega -> {
-					EntregaModel entregaModel = new EntregaModel();
-					entregaModel.setId(entrega.getId());
-					entregaModel.setNomeCliente(entrega.getCliente().getNome());
-					entregaModel.setDestinatario(new DestinatarioModel());
-					entregaModel.getDestinatario().setNome(entrega.getDestinatario().getNome());
-					entregaModel.getDestinatario().setLogradouro(entrega.getDestinatario().getLogradouro());
-					entregaModel.getDestinatario().setNumero(entrega.getDestinatario().getNumero());
-					entregaModel.getDestinatario().setComplemento(entrega.getDestinatario().getComplemento());
-					entregaModel.getDestinatario().setBairro(entrega.getDestinatario().getBairro());
-					entregaModel.setTaxa(entrega.getTaxa());
-					entregaModel.setStatus(entrega.getStatus());
-					entregaModel.setDataPedido(entrega.getDataPedido());
-					entregaModel.setDataFinalizacao(entrega.getDataFinalizacao());
-					
-					return ResponseEntity.ok(entregaModel);
-				}).orElse(ResponseEntity.notFound().build());
+				.map(entrega -> ResponseEntity.ok(entregaAssembler.toModel(entrega)))
+				.orElse(ResponseEntity.notFound().build());
 	}
 }
