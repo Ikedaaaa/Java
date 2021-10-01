@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -19,6 +20,7 @@ import com.algaworks.algalog.api.model.EntregaModel;
 import com.algaworks.algalog.api.model.input.EntregaInput;
 import com.algaworks.algalog.domain.model.Entrega;
 import com.algaworks.algalog.domain.repository.EntregaRepository;
+import com.algaworks.algalog.domain.service.FinalizacaoEntregaService;
 import com.algaworks.algalog.domain.service.SolicitacaoEntregaService;
 
 @RestController
@@ -27,13 +29,15 @@ public class EntregaController {
 
 	private EntregaRepository entregaRepository;
 	private SolicitacaoEntregaService solicitacaoEntregaService;
+	private FinalizacaoEntregaService finalizacaoEntregaService;
 	private EntregaAssembler entregaAssembler;
 	
 	public EntregaController(EntregaRepository entregaRepository, SolicitacaoEntregaService solicitacaoEntregaService,
-			EntregaAssembler entregaAssembler) {
+			FinalizacaoEntregaService finalizacaoEntregaService, EntregaAssembler entregaAssembler) {
 		super();
 		this.entregaRepository = entregaRepository;
 		this.solicitacaoEntregaService = solicitacaoEntregaService;
+		this.finalizacaoEntregaService = finalizacaoEntregaService;
 		this.entregaAssembler = entregaAssembler;
 	}
 
@@ -47,6 +51,12 @@ public class EntregaController {
 			entregaSolicitada.getDestinatario().setComplemento("Não informado");
 		}
 		return entregaAssembler.toModel(solicitacaoEntregaService.solicitar(entregaSolicitada)); //complemento na base está como not null
+	}
+	
+	@PutMapping("/{identrega}/finalizacao")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void finalizar(@PathVariable Long identrega) {
+		finalizacaoEntregaService.finalizar(identrega);
 	}
 	
 	@GetMapping

@@ -19,6 +19,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.algaworks.algalog.domain.exception.NegocioException;
+
 @Entity
 @Table(name="Entregas")
 public class Entrega {
@@ -126,6 +128,7 @@ public class Entrega {
 	public void setDataFinalizacao(OffsetDateTime dataFinalizacao) {
 		this.dataFinalizacao = dataFinalizacao;
 	}
+	
 	public Ocorrencia adicionarOcorrencia(String descricao) {
 		Ocorrencia ocorrencia = new Ocorrencia();
 		ocorrencia.setDescricao(descricao);
@@ -134,6 +137,19 @@ public class Entrega {
 		this.getOcorrencias().add(ocorrencia);
 		return ocorrencia;
 		
+	}
+	
+	public void finalizar() {
+		if (!podeSerFinalizada()) {
+			throw new NegocioException("Entrega não pode ser finalizada");
+		}
+		
+		setStatus(StatusEntrega.FINALIZADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+	
+	public boolean podeSerFinalizada() {
+		return StatusEntrega.PENDENTE.equals(getStatus());
 	}
 
 }
