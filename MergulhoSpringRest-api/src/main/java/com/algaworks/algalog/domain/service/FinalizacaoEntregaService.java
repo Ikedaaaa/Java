@@ -26,4 +26,13 @@ public class FinalizacaoEntregaService {
 		
 		entregaRepository.save(entrega);
 	}
+	
+	@Transactional
+	public void cancelar(Long identrega) {
+		Entrega entrega = buscaEntregaService.buscar(identrega);
+		
+		entrega.cancelar();
+		
+		entregaRepository.save(entrega);
+	}
 }

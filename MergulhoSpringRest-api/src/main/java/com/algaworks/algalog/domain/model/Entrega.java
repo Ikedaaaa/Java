@@ -148,6 +148,15 @@ public class Entrega {
 		setDataFinalizacao(OffsetDateTime.now());
 	}
 	
+	public void cancelar() {
+		if (!podeSerFinalizada()) {
+			throw new NegocioException("Entrega não pode ser cancelada");
+		}
+		
+		setStatus(StatusEntrega.CANCELADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+	
 	public boolean podeSerFinalizada() {
 		return StatusEntrega.PENDENTE.equals(getStatus());
 	}

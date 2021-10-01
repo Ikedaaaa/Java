@@ -59,6 +59,12 @@ public class EntregaController {
 		finalizacaoEntregaService.finalizar(identrega);
 	}
 	
+	@PutMapping("/{identrega}/cancelamento")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void cancelar(@PathVariable Long identrega) {
+		finalizacaoEntregaService.cancelar(identrega);
+	}
+	
 	@GetMapping
 	public List<EntregaModel> listar() {
 		return entregaAssembler.toColletionModel(entregaRepository.findAll());
