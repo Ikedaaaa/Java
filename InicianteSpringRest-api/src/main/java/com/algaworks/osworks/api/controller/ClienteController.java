@@ -3,8 +3,6 @@ package com.algaworks.osworks.api.controller;
 import java.util.List;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +26,6 @@ import com.algaworks.osworks.domain.service.CadastroClienteService;
 @RestController
 @RequestMapping("/clientes")
 public class ClienteController {
-
-	@PersistenceContext
-	private EntityManager manager;
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
