@@ -14,6 +14,13 @@ public class Problema {
 	private String titulo;
 	private List<Campo> campos;
 	
+	public Problema(Integer status, String titulo, OffsetDateTime dataHora) {
+		super();
+		this.status = status;
+		this.dataHora = dataHora;
+		this.titulo = titulo;
+	}
+	
 	public static class Campo {
 		
 		private String nome;

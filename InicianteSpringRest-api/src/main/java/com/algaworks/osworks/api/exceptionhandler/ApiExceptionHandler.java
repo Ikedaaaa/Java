@@ -30,10 +30,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	public ResponseEntity<Object> handleEntidadeNaoEncontrada(NegocioException ex, WebRequest request){
 		var status = HttpStatus.NOT_FOUND;
 		
-		var problema = new Problema();
-		problema.setStatus(status.value());
-		problema.setTitulo(ex.getMessage());
-		problema.setDataHora(OffsetDateTime.now());
+		var problema = new Problema(status.value(), ex.getMessage(), OffsetDateTime.now());
 		
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
@@ -41,11 +38,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(NegocioException.class)
 	public ResponseEntity<Object> handleNegocio(NegocioException ex, WebRequest request){
 		var status = HttpStatus.BAD_REQUEST;
-		//refatorar instanciação de problema?
-		var problema = new Problema();
-		problema.setStatus(status.value());
-		problema.setTitulo(ex.getMessage());
-		problema.setDataHora(OffsetDateTime.now());
+		
+		var problema = new Problema(status.value(), ex.getMessage(), OffsetDateTime.now());
 		
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
@@ -63,10 +57,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			campos.add(new Problema.Campo(nome, mensagem));
 		}
 		
-		var problema = new Problema();
-		problema.setStatus(status.value());
-		problema.setTitulo("Um ou mais campos não foram preenchidos corretamente :(");
-		problema.setDataHora(OffsetDateTime.now());
+		var problema = new Problema(status.value(), "Um ou mais campos não foram preenchidos corretamente :(", OffsetDateTime.now());
 		problema.setCampos(campos);
 		
 		return super.handleExceptionInternal(ex, problema, headers, status, request);
