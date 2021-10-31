@@ -121,15 +121,22 @@ public class OrdemServico {
 	}
 	
 	public void finalizar() {
-		checkFinalizacao();
+		checkFinalizacao("finalizada");
 		
 		setStatus(StatusOrdemServico.FINALIZADA);
 		setDataFinalizacao(OffsetDateTime.now());
 	}
 	
-	public void checkFinalizacao() {
+	public void cancelar() {
+		checkFinalizacao("cancelada");
+		
+		setStatus(StatusOrdemServico.CANCELADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+	
+	public void checkFinalizacao(String status) {
 		if (!podeSerFinalizada()) {
-			throw new NegocioException("Ordem de Serviço não pode ser finalizada");
+			throw new NegocioException("Ordem de Serviço não pode ser " + status);
 		}
 	}
 	

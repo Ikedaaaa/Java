@@ -69,6 +69,12 @@ public class OrdemServicoController {
 		gestaoOrdemServico.finalizar(idordem_servico);
 	}
 	
+	@PutMapping("/{idordem_servico}/cancelamento")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void cancelar(@PathVariable Long idordem_servico) {
+		gestaoOrdemServico.cancelar(idordem_servico);
+	}
+	
 	private OrdemServicoModel toModel(OrdemServico ordemServico) {
 		return modelMapper.map(ordemServico, OrdemServicoModel.class);
 	}

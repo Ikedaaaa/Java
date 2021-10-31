@@ -46,6 +46,14 @@ public class GestaoOrdemServicoService {
 		ordemServicoRepository.save(ordemServico);
 	}
 	
+	public void cancelar(Long idordem_servico) {
+		OrdemServico ordemServico = buscar(idordem_servico);
+		
+		ordemServico.cancelar();
+		
+		ordemServicoRepository.save(ordemServico);
+	}
+	
 	public Comentario adicionarComentario(Long idordem_servico, String descricao) {
 		OrdemServico ordemServico = buscar(idordem_servico);
 		
