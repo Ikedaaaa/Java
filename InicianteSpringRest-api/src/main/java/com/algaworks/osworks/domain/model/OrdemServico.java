@@ -17,6 +17,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.algaworks.osworks.domain.exception.NegocioException;
+
 @Entity
 @Table(name="Ordens_Servico")
 public class OrdemServico {
@@ -118,5 +120,21 @@ public class OrdemServico {
 		return true;
 	}
 	
+	public void finalizar() {
+		checkFinalizacao();
+		
+		setStatus(StatusOrdemServico.FINALIZADA);
+		setDataFinalizacao(OffsetDateTime.now());
+	}
+	
+	public void checkFinalizacao() {
+		if (!podeSerFinalizada()) {
+			throw new NegocioException("Ordem de Serviço não pode ser finalizada");
+		}
+	}
+	
+	public boolean podeSerFinalizada() {
+		return StatusOrdemServico.ABERTA.equals(getStatus());
+	}
 	
 }
