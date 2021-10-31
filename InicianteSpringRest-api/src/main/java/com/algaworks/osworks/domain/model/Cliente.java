@@ -8,18 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.algaworks.osworks.domain.ValidationGroups;
-
-
 
 @Entity
 @Table(name="Clientes")
 public class Cliente {
 
-	@NotNull(groups = ValidationGroups.ClienteId.class)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="idcliente")

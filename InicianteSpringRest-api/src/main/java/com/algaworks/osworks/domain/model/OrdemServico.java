@@ -13,15 +13,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
-
-import com.algaworks.osworks.domain.ValidationGroups;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonProperty.Access;
 
 @Entity
 @Table(name="Ordens_Servico")
@@ -32,28 +23,19 @@ public class OrdemServico {
 	@Column(name="idordem_servico")
 	private Long id;
 	
-	@Valid
-	@ConvertGroup(from = Default.class, to = ValidationGroups.ClienteId.class)
-	@NotNull
 	@ManyToOne
 	@JoinColumn(name="cliente_id")
 	private Cliente cliente;
 	
-	@NotBlank
 	private String descricao;
-	
-	@NotNull
 	private BigDecimal preco;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	@Enumerated(EnumType.STRING)
 	private StatusOrdemServico status;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	@Column(name="data_abertura")
 	private OffsetDateTime dataAbertura;
 	
-	@JsonProperty(access = Access.READ_ONLY)
 	@Column(name="data_finalizacao")
 	private OffsetDateTime dataFinalizacao;
 	
