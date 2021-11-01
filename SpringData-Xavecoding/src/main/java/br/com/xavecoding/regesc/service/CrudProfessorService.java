@@ -1,5 +1,6 @@
 package br.com.xavecoding.regesc.service;
 
+import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
@@ -26,12 +27,21 @@ public class CrudProfessorService {
 			System.out.println("\nQual ação você quer executar?");
 			System.out.println("0 - Voltar ao menu anterior");
 			System.out.println("1 - Cadastrar novo Professor");
+			System.out.println("2 - Atualizar um Professor");
+			System.out.println("9 - Atualizar um Professor sem FindById (Tenta atualizar pelo Id passado, "+
+			"se não encontrar, cria um novo registro)");
 			
 			int opcao = scanner.nextInt();
 			
 			switch(opcao) {
 			case 1:
 				this.cadastrar(scanner);
+				break;
+			case 2:
+				this.atualizar(scanner);
+				break;
+			case 9:
+				this.atualizarSemFindById(scanner);
 				break;
 			default:
 				isTrue = false;
@@ -51,6 +61,71 @@ public class CrudProfessorService {
 		Professor professor = new Professor(nome, prontuario);
 		this.professorRepository.save(professor);
 		System.out.println("Professor salvo no banco!!\n");
+	}
+	
+	private void atualizar(Scanner scanner) {
+		System.out.println("\nDigite o Id do Professor a ser atualizado: ");
+		Long id = scanner.nextLong();
+		
+		System.out.println();
+		
+		Optional<Professor> optional = this.professorRepository.findById(id);
+		
+		// se o hibernate conseguiu achar uma tupla/registro na tabela de professores com id igual ao passado pelo usuário
+		if(optional.isPresent()) {
+			System.out.println(atualizaCampos(scanner, optional));
+		} else {
+			System.out.println("O Id do professor informado [ " + id +" ] é inválido");
+		}
+		
+	}
+	
+	private String atualizaCampos(Scanner scanner, Optional<Professor> optional) {
+		
+		Professor professor = optional.get();
+		
+		System.out.println("\nQual campo quer atualizar?");
+		System.out.println("1 - Nome");
+		System.out.println("2 - Prontuário");
+		System.out.println("3 - Ambos");
+		
+		int opcao = scanner.nextInt();
+		
+		if (opcao == 1 || opcao == 3) {
+			System.out.println("Digite o nome do professor: ");
+			String nome = scanner.next();
+			professor.setNome(nome);
+		}
+		if (opcao == 2 || opcao == 3) {
+			System.out.println("Digite o prontuário do professor: ");
+			String prontuario = scanner.next();
+			professor.setProntuario(prontuario);
+		}
+		if(opcao < 1 || opcao > 3) {
+			return "\nOpção inválida :(";
+		}
+		
+		professorRepository.save(professor);
+		return "\nProfessor atualizado com sucesso no banco!!\n";
+	}
+	
+	private void atualizarSemFindById(Scanner scanner) {
+		System.out.println("Digite o Id do Professor a ser atualizado: ");
+		Long id = scanner.nextLong();
+		
+		System.out.println("Digite o nome do professor: ");
+		String nome = scanner.next();
+		
+		System.out.println("Digite o prontuário do professor: ");
+		String prontuario = scanner.next();
+		
+		Professor professor = new Professor();
+		professor.setId(id);
+		professor.setNome(nome);
+		professor.setProntuario(prontuario);
+		
+		professorRepository.save(professor);
+		System.out.println("Professor atualizado com sucesso no banco!!\\n");
 	}
 	
 }

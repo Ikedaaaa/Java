@@ -30,7 +30,7 @@ public class SpringDataXavecodingApplication implements CommandLineRunner {
 		Scanner scanner = new Scanner(System.in);
 		
 		while(isTrue) {
-			System.out.println("Qual entidade você deseja interagir?");
+			System.out.println("\nQual entidade você deseja interagir?");
 			System.out.println("0 - Sair");
 			System.out.println("1 - Professor");
 			
