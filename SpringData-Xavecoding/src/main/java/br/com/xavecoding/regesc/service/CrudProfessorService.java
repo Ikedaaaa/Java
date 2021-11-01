@@ -28,6 +28,8 @@ public class CrudProfessorService {
 			System.out.println("0 - Voltar ao menu anterior");
 			System.out.println("1 - Cadastrar novo Professor");
 			System.out.println("2 - Atualizar um Professor");
+			System.out.println("3 - Visualizar todos os Professores");
+			System.out.println("4 - Deletar um Professor");
 			System.out.println("9 - Atualizar um Professor sem FindById (Tenta atualizar pelo Id passado, "+
 			"se não encontrar, cria um novo registro)");
 			
@@ -39,6 +41,12 @@ public class CrudProfessorService {
 				break;
 			case 2:
 				this.atualizar(scanner);
+				break;
+			case 3:
+				this.visualizar();
+				break;
+			case 4:
+				this.deletar(scanner);
 				break;
 			case 9:
 				this.atualizarSemFindById(scanner);
@@ -77,7 +85,39 @@ public class CrudProfessorService {
 		} else {
 			System.out.println("O Id do professor informado [ " + id +" ] é inválido");
 		}
+	}
+	
+	private void visualizar() {
+		Iterable<Professor> professores = this.professorRepository.findAll();
 		
+		System.out.println("\nLista com foreach");
+		
+		for(Professor professor: professores) {
+			System.out.println(professor);
+		}
+		
+		System.out.println("\nLista com lambda function forEach()");
+		professores.forEach(professor -> {
+			System.out.println(professor);
+		});
+		
+		System.out.println("\nLista com System.out::println");
+		professores.forEach(System.out::println);
+		System.out.println();
+	}
+	
+	private void deletar(Scanner scanner) {
+		System.out.println("\nDigite o Id do Professor a ser atualizado: ");
+		Long id = scanner.nextLong();
+		
+		Optional<Professor> optional = this.professorRepository.findById(id);
+		
+		if(optional.isPresent()) {
+			this.professorRepository.deleteById(id);
+			System.out.println("Professor deletado!\n");
+		} else {
+			System.out.println("O Id do professor informado [ " + id +" ] é inválido");
+		}
 	}
 	
 	private String atualizaCampos(Scanner scanner, Optional<Professor> optional) {
@@ -125,7 +165,7 @@ public class CrudProfessorService {
 		professor.setProntuario(prontuario);
 		
 		professorRepository.save(professor);
-		System.out.println("Professor atualizado com sucesso no banco!!\\n");
+		System.out.println("Professor atualizado com sucesso no banco!!\n");
 	}
 	
 }
