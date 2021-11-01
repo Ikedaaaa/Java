@@ -107,7 +107,7 @@ public class CrudProfessorService {
 	}
 	
 	private void deletar(Scanner scanner) {
-		System.out.println("\nDigite o Id do Professor a ser atualizado: ");
+		System.out.println("\nDigite o Id do Professor a ser deletado: ");
 		Long id = scanner.nextLong();
 		
 		Optional<Professor> optional = this.professorRepository.findById(id);
