@@ -1,10 +1,13 @@
 package br.com.xavecoding.regesc.orm;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -21,6 +24,9 @@ public class Professor {
 	
 	@Column(nullable = false, unique = true)
 	private String prontuario;
+	
+	@OneToMany(mappedBy = "professor")
+	private List<Disciplina> disciplinas; 
 	
 	@Deprecated
 	public Professor() {
