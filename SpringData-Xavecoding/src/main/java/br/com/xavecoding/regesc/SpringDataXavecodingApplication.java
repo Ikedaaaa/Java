@@ -1,20 +1,23 @@
 package br.com.xavecoding.regesc;
 
+import java.util.Scanner;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import br.com.xavecoding.regesc.orm.Professor;
-import br.com.xavecoding.regesc.repository.ProfessorRepository;
+import br.com.xavecoding.regesc.service.CrudProfessorService;
 
 @SpringBootApplication
 public class SpringDataXavecodingApplication implements CommandLineRunner {
-
-	private ProfessorRepository repository;
 	
-	public SpringDataXavecodingApplication(ProfessorRepository repository) {
+	private CrudProfessorService crudProfessorService;
+
+	//os objetos passados por parâmetro são injetadas automaticamente pelo Spring
+	//pq suas classes possuem a anotação @Service
+	public SpringDataXavecodingApplication(CrudProfessorService crudProfessorService) {
 		super();
-		this.repository = repository;
+		this.crudProfessorService = crudProfessorService;
 	}
 
 	public static void main(String[] args) {
@@ -23,15 +26,25 @@ public class SpringDataXavecodingApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Professor professor = new Professor("Qualquer coisa", "sp1751837");
+		boolean isTrue = true;
+		Scanner scanner = new Scanner(System.in);
 		
-		System.out.println("Professor ANTES do save (persistência com BD)");
-		System.out.println(professor);
-		
-		this.repository.save(professor);
-		
-		System.out.println("Professor DEPOIS do save (persistência com BD)");
-		System.out.println(professor);
+		while(isTrue) {
+			System.out.println("Qual entidade você deseja interagir?");
+			System.out.println("0 - Sair");
+			System.out.println("1 - Professor");
+			
+			int opcao = scanner.nextInt();
+			
+			switch(opcao) {
+			case 1:
+				this.crudProfessorService.menu(scanner);
+				break;
+			default:
+				isTrue = false;
+				break;
+			}
+		}
 	}
 
 }
