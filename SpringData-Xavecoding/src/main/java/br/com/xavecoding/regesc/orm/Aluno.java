@@ -26,7 +26,22 @@ public class Aluno {
 	
 	@ManyToMany(mappedBy = "alunos")
 	List<Disciplina> disciplinas;
+	
+	public Aluno() {}
+	
+	public Aluno(String nome, Integer idade) {
+		this.nome = nome;
+		this.idade = idade;
+	}
 
+	public Aluno(Long id, String nome, Integer idade, List<Disciplina> disciplinas) {
+		super();
+		this.id = id;
+		this.nome = nome;
+		this.idade = idade;
+		this.disciplinas = disciplinas;
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -53,6 +68,11 @@ public class Aluno {
 	}
 	public void setDisciplinas(List<Disciplina> disciplinas) {
 		this.disciplinas = disciplinas;
+	}
+
+	@Override
+	public String toString() {
+		return "Aluno [id=" + id + ", nome=" + nome + ", idade=" + idade + "]";
 	}
 	
 }

@@ -1,12 +1,16 @@
 package br.com.xavecoding.regesc.service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
 import org.springframework.stereotype.Service;
 
+import br.com.xavecoding.regesc.orm.Aluno;
 import br.com.xavecoding.regesc.orm.Disciplina;
 import br.com.xavecoding.regesc.orm.Professor;
+import br.com.xavecoding.regesc.repository.AlunoRepository;
 import br.com.xavecoding.regesc.repository.DisciplinaRepository;
 import br.com.xavecoding.regesc.repository.ProfessorRepository;
 
@@ -15,11 +19,14 @@ public class CrudDisciplinaService {
 
 	private ProfessorRepository professorRepository;
 	private DisciplinaRepository disciplinaRepository;
+	private AlunoRepository alunoRepository;
 	
-	public CrudDisciplinaService(ProfessorRepository professorRepository, DisciplinaRepository disciplinaRepository) {
+	public CrudDisciplinaService(ProfessorRepository professorRepository, DisciplinaRepository disciplinaRepository,
+			AlunoRepository alunoRepository) {
 		super();
 		this.professorRepository = professorRepository;
 		this.disciplinaRepository = disciplinaRepository;
+		this.alunoRepository = alunoRepository;
 	}
 	
 	public void menu(Scanner scanner) {
@@ -32,6 +39,7 @@ public class CrudDisciplinaService {
 			System.out.println("2 - Atualizar uma Disciplina");
 			System.out.println("3 - Visualizar todas as Disciplinas");
 			System.out.println("4 - Deletar uma Disciplina");
+			System.out.println("5 - Matricular Alunos");
 			
 			int opcao = scanner.nextInt();
 			
@@ -48,6 +56,9 @@ public class CrudDisciplinaService {
 			case 4:
 				this.deletar(scanner);
 				break;
+			case 5:
+				this.matricularAlunos(scanner);
+				break;
 			default:
 				isTrue = false;
 				break;
@@ -55,7 +66,7 @@ public class CrudDisciplinaService {
 		}
 		System.out.println();
 	}
-	
+
 	private void cadastrar(Scanner scanner) {
 		System.out.println("Nome da Disciplina: ");
 		String nome = scanner.next();
@@ -71,6 +82,12 @@ public class CrudDisciplinaService {
 		if(optional.isPresent()) {
 			Professor professor = optional.get();
 			Disciplina disciplina = new Disciplina(nome, semestre, professor);
+			
+			List<Aluno> alunos = this.matricular(scanner);
+			if (!alunos.isEmpty()) {
+				disciplina.setAlunos(alunos);
+			}
+			
 			disciplinaRepository.save(disciplina);
 			System.out.println("Disciplina cadastrada!\n");
 		} else {
@@ -119,6 +136,43 @@ public class CrudDisciplinaService {
 		}
 	}
 	
+	private void matricularAlunos(Scanner scanner) {
+		System.out.println("Digite o Id da Disciplina para matricular alunos");
+		Long id = scanner.nextLong();
+		
+		Optional<Disciplina> optional = this.disciplinaRepository.findById(id);
+		if(optional.isPresent()) {
+			Disciplina disciplina = optional.get();
+			List<Aluno> novosAlunos = this.matricular(scanner);
+			disciplina.getAlunos().addAll(novosAlunos);
+			this.disciplinaRepository.save(disciplina);
+		} else {
+			System.out.println("O Id da Disciplina informado [ " + id +" ] é inválido");
+		}
+	}
+	
+	private List<Aluno> matricular(Scanner scanner) {
+		Boolean verdadeiro = true;
+		List<Aluno> alunos = new ArrayList<Aluno>();
+		
+		while (verdadeiro) {
+			System.out.println("Id do Aluno a ser matriculado: (0 - Sair)");
+			Long id = scanner.nextLong();
+			
+			if (id > 0) {
+				Optional<Aluno> optional = this.alunoRepository.findById(id);
+				if(optional.isPresent()) {
+					alunos.add(optional.get());
+				} else {
+					System.out.println("O Id do Aluno informado [ " + id +" ] é inválido");
+				}
+			} else {
+				verdadeiro = false;
+			}
+		}
+		return alunos;
+	}
+
 	private String atualizaCampos(Scanner scanner, Optional<Disciplina> optional) {
 		
 		Disciplina disciplina = optional.get();
@@ -158,6 +212,17 @@ public class CrudDisciplinaService {
 				camposAtualizados += 1;
 			} else {
 				return "O Id do professor informado [ " + idprofessor +" ] é inválido";
+			}
+		}
+		
+		System.out.println("\nAtualizar Alunos? (0 - não; 1 - sim)");
+		opcao = scanner.nextInt();
+		
+		if (opcao == 1) {
+			List<Aluno> alunos = this.matricular(scanner);
+			if (!alunos.isEmpty()) {
+				disciplina.setAlunos(alunos);
+				camposAtualizados += 1;
 			}
 		}
 		

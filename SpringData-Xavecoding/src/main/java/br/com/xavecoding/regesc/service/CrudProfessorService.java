@@ -158,12 +158,16 @@ public class CrudProfessorService {
 			System.out.println("Prontuario: " + professor.getProntuario());
 			System.out.println("Disciplina: [");
 			
-			for (Disciplina disciplina : professor.getDisciplinas()) {
-				System.out.println("\n\tID: " + disciplina.getId());
-				System.out.println("\tNome: " + disciplina.getNome());				
-				System.out.println("\tSemestre: " + disciplina.getSemestre());
+			if (professor.getDisciplinas() != null) {
+				for (Disciplina disciplina : professor.getDisciplinas()) {
+					System.out.println("\n\tID: " + disciplina.getId());
+					System.out.println("\tNome: " + disciplina.getNome());				
+					System.out.println("\tSemestre: " + disciplina.getSemestre());
+				}
+			} else {
+				System.out.println("\tNenhuma disciplina associada ao Professor");
 			}
-			System.out.println("]\n}");
+			System.out.println("	]\n}");
 		} else {
 			System.out.println("O Id do professor informado [ " + id +" ] é inválido");
 		}
