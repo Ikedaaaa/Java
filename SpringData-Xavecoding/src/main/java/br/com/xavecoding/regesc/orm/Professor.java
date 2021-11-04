@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PreRemove;
 import javax.persistence.Table;
 
 @Entity
@@ -33,8 +34,13 @@ public class Professor {
 	//se um professor estivesse associado a milhares de disciplinas
 	//Poderia ficar muito pesado ter que retornar tantos objetos assim
 	//para cada getDisciplinas que fosse feito
+	//
+	//Cascade: cascade = CascadeType.ALL
+	//uma ação que ocorrer com um Professor, se propaga para as tabelas relacionadas
+	//Ex: Se um professor for apagado, as disciplinas relacionadas
+	//a esse professor também são apagadas
 	@OneToMany(mappedBy = "professor"/*, fetch = FetchType.EAGER*/)
-	private List<Disciplina> disciplinas; 
+	private List<Disciplina> disciplinas;
 	
 	@Deprecated
 	public Professor() {
@@ -73,6 +79,20 @@ public class Professor {
 	}
 	public void setDisciplinas(List<Disciplina> disciplinas) {
 		this.disciplinas = disciplinas;
+	}
+	
+	//Um jeito de fazer ON REMOVE SET NULL
+	//Outra alternativa seria criar um Professor padrão no banco do Id 1
+	//Que nunca seria removido e seria atribuído esse Id quando
+	//Um professor fosse excluído
+	//Outra alternativa seria reescrever o método deleteById() do repositório
+	//Para que ela tivesse um comportamento diferente
+	@PreRemove
+	public void atualizaDisciplinaOnRemove() {
+		System.out.println("******* atualizaDisciplinaOnRemove *******");
+		for (Disciplina listDisciplinas : this.getDisciplinas()) {
+			listDisciplinas.setProfessor(null);
+		}
 	}
 
 	@Override

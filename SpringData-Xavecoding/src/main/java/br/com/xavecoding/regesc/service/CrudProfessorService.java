@@ -164,6 +164,8 @@ public class CrudProfessorService {
 				System.out.println("\tSemestre: " + disciplina.getSemestre());
 			}
 			System.out.println("]\n}");
+		} else {
+			System.out.println("O Id do professor informado [ " + id +" ] é inválido");
 		}
 	}
 	
