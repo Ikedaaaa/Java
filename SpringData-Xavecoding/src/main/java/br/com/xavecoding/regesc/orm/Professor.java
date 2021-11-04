@@ -25,7 +25,15 @@ public class Professor {
 	@Column(nullable = false, unique = true)
 	private String prontuario;
 	
-	@OneToMany(mappedBy = "professor")
+	//Tipo de fetch padrão: fetch = FetchType.LAZY
+	//Pq por padrão em um relacionamento Um para Muitos,
+	//o sistema poderia ser sobrecarregdo se esse objeto estivesse associado
+	//a vários outros.
+	//Como nesse exemplo,
+	//se um professor estivesse associado a milhares de disciplinas
+	//Poderia ficar muito pesado ter que retornar tantos objetos assim
+	//para cada getDisciplinas que fosse feito
+	@OneToMany(mappedBy = "professor"/*, fetch = FetchType.EAGER*/)
 	private List<Disciplina> disciplinas; 
 	
 	@Deprecated
@@ -58,6 +66,13 @@ public class Professor {
 	}
 	public void setProntuario(String prontuario) {
 		this.prontuario = prontuario;
+	}
+
+	public List<Disciplina> getDisciplinas() {
+		return disciplinas;
+	}
+	public void setDisciplinas(List<Disciplina> disciplinas) {
+		this.disciplinas = disciplinas;
 	}
 
 	@Override

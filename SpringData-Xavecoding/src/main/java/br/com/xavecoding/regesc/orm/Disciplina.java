@@ -23,7 +23,10 @@ public class Disciplina {
 	
 	private Integer semestre;
 	
-	@ManyToOne
+	//Tipo de fetch padrão: fetch = FetchType.EAGER
+	//Pq por padrão em um relacionamento Muitos para Um,
+	//é leve retornar um objeto a mais do banco
+	@ManyToOne//(fetch = FetchType.EAGER)
 	@JoinColumn(name = "professor_id", nullable = true)
 	private Professor professor;
 

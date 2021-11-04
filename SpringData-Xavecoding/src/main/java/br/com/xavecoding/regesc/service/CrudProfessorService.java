@@ -3,8 +3,11 @@ package br.com.xavecoding.regesc.service;
 import java.util.Optional;
 import java.util.Scanner;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
+import br.com.xavecoding.regesc.orm.Disciplina;
 import br.com.xavecoding.regesc.orm.Professor;
 import br.com.xavecoding.regesc.repository.ProfessorRepository;
 
@@ -20,6 +23,7 @@ public class CrudProfessorService {
 		this.professorRepository = professorRepository;
 	}
 
+	@Transactional
 	public void menu(Scanner scanner) {
 		boolean isTrue = true;
 		
@@ -30,6 +34,7 @@ public class CrudProfessorService {
 			System.out.println("2 - Atualizar um Professor");
 			System.out.println("3 - Visualizar todos os Professores");
 			System.out.println("4 - Deletar um Professor");
+			System.out.println("5 - Visualizar um Professor");
 			System.out.println("9 - Atualizar um Professor sem FindById (Tenta atualizar pelo Id passado, "+
 			"se não encontrar, cria um novo registro)");
 			
@@ -48,6 +53,9 @@ public class CrudProfessorService {
 			case 4:
 				this.deletar(scanner);
 				break;
+			case 5:
+				this.visualizarProfessor(scanner);
+				break;
 			case 9:
 				this.atualizarSemFindById(scanner);
 				break;
@@ -58,7 +66,7 @@ public class CrudProfessorService {
 		}
 		System.out.println();
 	}
-	
+
 	private void cadastrar(Scanner scanner) {
 		System.out.println("Digite o nome do professor: ");
 		String nome = scanner.next();
@@ -120,6 +128,45 @@ public class CrudProfessorService {
 		}
 	}
 	
+	//Mesmo se o tipo de fetching for LAZY, o hibernate retorna os
+	//objetos associados se for usada a anotação @Transactional:
+	//1. No método que chama o getDisciplinas;
+	//2. No método que chama o método que chama o getDisciplinas.
+	//Nesse caso: menu() e visualizarProfessor()
+	//
+	//Com @Transational e o fetch LAZY, são feitas duas consultas ao banco de dados:
+	//no findById() e no getDisciplinas();
+	//Com fetch EAGER em List<Disciplina>, é feita apenas
+	//uma consulta, no findById()
+	//
+	/* Como alternativa, a anotação pode ser colocada na classe
+	 * Indicando que todos os métodos da classe estão aptos a
+	 * interagir com o banco de dados*/
+	@Transactional
+	private void visualizarProfessor(Scanner scanner) {
+		System.out.println("\nDigite o Id do Professor a ser visualizado: ");
+		Long id = scanner.nextLong();
+		
+		Optional<Professor> optional = this.professorRepository.findById(id);
+		
+		if(optional.isPresent()) {
+			Professor professor = optional.get();
+			
+			System.out.println("\nProfessor: {");
+			System.out.println("ID: " + professor.getId());
+			System.out.println("Nome: " + professor.getNome());
+			System.out.println("Prontuario: " + professor.getProntuario());
+			System.out.println("Disciplina: [");
+			
+			for (Disciplina disciplina : professor.getDisciplinas()) {
+				System.out.println("\n\tID: " + disciplina.getId());
+				System.out.println("\tNome: " + disciplina.getNome());				
+				System.out.println("\tSemestre: " + disciplina.getSemestre());
+			}
+			System.out.println("]\n}");
+		}
+	}
+	
 	private String atualizaCampos(Scanner scanner, Optional<Professor> optional) {
 		
 		Professor professor = optional.get();
@@ -159,6 +206,7 @@ public class CrudProfessorService {
 		System.out.println("Digite o prontuário do professor: ");
 		String prontuario = scanner.next();
 		
+		@SuppressWarnings("deprecation")
 		Professor professor = new Professor();
 		professor.setId(id);
 		professor.setNome(nome);
