@@ -1,11 +1,15 @@
 package br.com.xavecoding.regesc.orm;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -29,6 +33,10 @@ public class Disciplina {
 	@ManyToOne//(fetch = FetchType.EAGER)
 	@JoinColumn(name = "professor_id", nullable = true)
 	private Professor professor;
+	
+	@ManyToMany
+	@JoinTable(name = "Disciplinas_Alunos", joinColumns = @JoinColumn(name = "disciplina_id"), inverseJoinColumns = @JoinColumn(name = "aluno_id"))
+	List<Aluno> alunos;
 
 	@Deprecated
 	public Disciplina() {
