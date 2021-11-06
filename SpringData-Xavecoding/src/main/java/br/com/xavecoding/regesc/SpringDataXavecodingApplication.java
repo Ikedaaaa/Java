@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import br.com.xavecoding.regesc.service.CrudAlunoService;
 import br.com.xavecoding.regesc.service.CrudDisciplinaService;
 import br.com.xavecoding.regesc.service.CrudProfessorService;
+import br.com.xavecoding.regesc.service.RelatorioService;
 
 @SpringBootApplication
 public class SpringDataXavecodingApplication implements CommandLineRunner {
@@ -16,15 +17,17 @@ public class SpringDataXavecodingApplication implements CommandLineRunner {
 	private CrudProfessorService crudProfessorService;
 	private CrudDisciplinaService crudDisciplinaService;
 	private CrudAlunoService crudAlunoService;
+	private RelatorioService relatorioService;
 
 	//os objetos passados por parâmetro são injetadas automaticamente pelo Spring
 	//pq suas classes possuem a anotação @Service
 	public SpringDataXavecodingApplication(CrudProfessorService crudProfessorService, CrudDisciplinaService crudDisciplinaService,
-			CrudAlunoService crudAlunoService) {
+			CrudAlunoService crudAlunoService, RelatorioService relatorioService) {
 		super();
 		this.crudProfessorService = crudProfessorService;
 		this.crudDisciplinaService = crudDisciplinaService;
 		this.crudAlunoService = crudAlunoService;
+		this.relatorioService = relatorioService;
 	}
 
 	public static void main(String[] args) {
@@ -37,11 +40,12 @@ public class SpringDataXavecodingApplication implements CommandLineRunner {
 		Scanner scanner = new Scanner(System.in);
 		
 		while(isTrue) {
-			System.out.println("\nQual entidade você deseja interagir?");
+			System.out.println("\nO que deseja acessar?");
 			System.out.println("0 - Sair");
 			System.out.println("1 - Professor");
 			System.out.println("2 - Disciplina");
 			System.out.println("3 - Aluno");
+			System.out.println("4 - Relatório");
 			
 			int opcao = scanner.nextInt();
 			
@@ -54,6 +58,9 @@ public class SpringDataXavecodingApplication implements CommandLineRunner {
 				break;
 			case 3:
 				this.crudAlunoService.menu(scanner);
+				break;
+			case 4:
+				this.relatorioService.menu(scanner);
 				break;
 			default:
 				isTrue = false;
