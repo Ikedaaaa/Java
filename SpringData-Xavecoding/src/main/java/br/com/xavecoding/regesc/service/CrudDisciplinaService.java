@@ -1,7 +1,7 @@
 package br.com.xavecoding.regesc.service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -83,7 +83,7 @@ public class CrudDisciplinaService {
 			Professor professor = optional.get();
 			Disciplina disciplina = new Disciplina(nome, semestre, professor);
 			
-			List<Aluno> alunos = this.matricular(scanner);
+			Set<Aluno> alunos = this.matricular(scanner);
 			if (!alunos.isEmpty()) {
 				disciplina.setAlunos(alunos);
 			}
@@ -143,7 +143,7 @@ public class CrudDisciplinaService {
 		Optional<Disciplina> optional = this.disciplinaRepository.findById(id);
 		if(optional.isPresent()) {
 			Disciplina disciplina = optional.get();
-			List<Aluno> novosAlunos = this.matricular(scanner);
+			Set<Aluno> novosAlunos = this.matricular(scanner);
 			disciplina.getAlunos().addAll(novosAlunos);
 			this.disciplinaRepository.save(disciplina);
 		} else {
@@ -151,9 +151,9 @@ public class CrudDisciplinaService {
 		}
 	}
 	
-	private List<Aluno> matricular(Scanner scanner) {
+	private Set<Aluno> matricular(Scanner scanner) {
 		Boolean verdadeiro = true;
-		List<Aluno> alunos = new ArrayList<Aluno>();
+		Set<Aluno> alunos = new HashSet<>();
 		
 		while (verdadeiro) {
 			System.out.println("Id do Aluno a ser matriculado: (0 - Sair)");
@@ -219,7 +219,7 @@ public class CrudDisciplinaService {
 		opcao = scanner.nextInt();
 		
 		if (opcao == 1) {
-			List<Aluno> alunos = this.matricular(scanner);
+			Set<Aluno> alunos = this.matricular(scanner);
 			if (!alunos.isEmpty()) {
 				disciplina.setAlunos(alunos);
 				camposAtualizados += 1;

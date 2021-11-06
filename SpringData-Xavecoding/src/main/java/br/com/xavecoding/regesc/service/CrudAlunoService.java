@@ -1,8 +1,8 @@
 package br.com.xavecoding.regesc.service;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.transaction.Transactional;
 
@@ -130,7 +130,7 @@ public class CrudAlunoService {
 			System.out.println("Idade: " + aluno.getIdade());
 			System.out.println("Disciplina: [");
 			
-			List<Disciplina> disciplinas = aluno.getDisciplinas();
+			Set<Disciplina> disciplinas = aluno.getDisciplinas();
 			
 			if (disciplinas != null) {
 				for (Disciplina disciplina : disciplinas) {

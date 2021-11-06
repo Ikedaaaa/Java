@@ -1,6 +1,6 @@
 package br.com.xavecoding.regesc.orm;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +25,7 @@ public class Aluno {
 	private Integer idade;
 	
 	@ManyToMany(mappedBy = "alunos")
-	List<Disciplina> disciplinas;
+	private Set<Disciplina> disciplinas;
 	
 	public Aluno() {}
 	
@@ -34,7 +34,7 @@ public class Aluno {
 		this.idade = idade;
 	}
 
-	public Aluno(Long id, String nome, Integer idade, List<Disciplina> disciplinas) {
+	public Aluno(Long id, String nome, Integer idade, Set<Disciplina> disciplinas) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -63,10 +63,10 @@ public class Aluno {
 		this.idade = idade;
 	}
 
-	public List<Disciplina> getDisciplinas() {
+	public Set<Disciplina> getDisciplinas() {
 		return disciplinas;
 	}
-	public void setDisciplinas(List<Disciplina> disciplinas) {
+	public void setDisciplinas(Set<Disciplina> disciplinas) {
 		this.disciplinas = disciplinas;
 	}
 
