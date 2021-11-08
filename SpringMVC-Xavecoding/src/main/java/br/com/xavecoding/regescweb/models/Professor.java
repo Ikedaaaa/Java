@@ -31,6 +31,13 @@ public class Professor {
 		super();
 	}
 
+	public Professor(String nome, BigDecimal salario, StatusProfessor status) {
+		super();
+		this.nome = nome;
+		this.salario = salario;
+		this.status = status;
+	}
+
 	public Long getId() {
 		return id;
 	}
