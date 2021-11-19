@@ -31,8 +31,8 @@
                     <div></div>
                 </div>
                 <div class="mb-3">
-                    <label for="statusProfessor" class="form-label">Status</label>
-                    <select name="statusProfessor" class="form-select">
+                    <label for="status" class="form-label">Status</label>
+                    <select name="status" class="form-select">
                         <option th:each="status: ${statusProfessor}"
                                 th:value="${status}" th:text="${status}"></option>
                     </select>
