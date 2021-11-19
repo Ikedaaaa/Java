@@ -2,7 +2,10 @@ package br.com.xavecoding.regescweb.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -39,11 +42,16 @@ public class ProfessorController {
 	}
 	
 	//create(Professor professor) = Web Parameter Tempering
+	//https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/ - 2.3.1 Jakarta Bean Validation Constraints
 	@PostMapping("professores")
-	public String create(RequisicaoNovoProfessor novoProfessor) {
-		Professor professor = novoProfessor.toProfessor();
-		this.professorRepository.save(professor);
-		return "redirect:/professores";
+	public String create(@Valid RequisicaoNovoProfessor novoProfessor, BindingResult bindingResult) {
+		if (bindingResult.hasErrors()) {
+			return "redirect:/professor/new";
+		} else {
+			Professor professor = novoProfessor.toProfessor();
+			this.professorRepository.save(professor);
+			return "redirect:/professores";
+		}
 	}
 	
 }

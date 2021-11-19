@@ -2,15 +2,24 @@ package br.com.xavecoding.regescweb.dto;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import br.com.xavecoding.regescweb.models.Professor;
 import br.com.xavecoding.regescweb.models.StatusProfessor;
 
 // É uma classe DTO
 public class RequisicaoNovoProfessor {
 	
+	@NotNull
+	@NotBlank
 	private String nome;
+	
+	@NotNull
+	@DecimalMin("0.0")
 	private BigDecimal salario;
-	private StatusProfessor status;
+	private StatusProfessor status; //pesquisar sobre validation de enum
 
 	public String getNome() {
 		return nome;
