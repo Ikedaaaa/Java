@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.com.xavecoding.regescweb.models.Professor;
@@ -34,6 +35,13 @@ public class ProfessorController {
 		ModelAndView mv = new ModelAndView("professores/new");
 		mv.addObject("statusProfessor", StatusProfessor.values());
 		return mv;
+	}
+	
+	//create(Professor professor) = Web Parameter Tempering
+	@PostMapping("professores")
+	public String create(Professor professor) {
+		
+		return "redirect:/professores";
 	}
 	
 }
