@@ -14,7 +14,7 @@ public class RequisicaoNovoProfessor {
 	
 	@NotNull
 	@NotBlank
-	private String nome;
+	private String nome; // Em caso de erro, NotBlank.requisicaoNovoProfessor.nome
 	
 	@NotNull
 	@DecimalMin("0.0")

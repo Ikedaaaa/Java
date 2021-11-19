@@ -1,6 +1,7 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring4-4.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <!-- https://getbootstrap.com/docs/5.1/getting-started/introduction/ -->
+<!-- https://getbootstrap.com/docs/5.1/forms/validation/ -->
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -22,13 +23,13 @@
             <form th:object="${requisicaoNovoProfessor}" action="/professores" method="post">
                 <div class="mb-3">
                     <label for="nome" class="form-label">Nome</label>
-                    <input type="text" class="form-control" th:field="*{nome}">
-                    <div></div>
+                    <input type="text" class="form-control" th:errorclass="is-invalid" th:field="*{nome}">
+                    <div class="invalid-feedback" th:errors="*{nome}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="salario" class="form-label">Salário</label>
-                    <input type="text" class="form-control" th:field="*{salario}">
-                    <div></div>
+                    <input type="text" class="form-control" th:errorclass="is-invalid" th:field="*{salario}">
+                    <div class="invalid-feedback" th:errors="*{salario}"></div>
                 </div>
                 <div class="mb-3">
                     <label for="status" class="form-label">Status</label>
