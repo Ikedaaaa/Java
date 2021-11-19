@@ -34,7 +34,7 @@ public class ProfessorController {
 		return mv;
 	}
 	
-	@GetMapping("/professor/new")
+	@GetMapping("/professores/new")
 	public ModelAndView newProfessor() {
 		ModelAndView mv = new ModelAndView("professores/new");
 		mv.addObject("statusProfessor", StatusProfessor.values());
@@ -44,13 +44,15 @@ public class ProfessorController {
 	//create(Professor professor) = Web Parameter Tempering
 	//https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/ - 2.3.1 Jakarta Bean Validation Constraints
 	@PostMapping("professores")
-	public String create(@Valid RequisicaoNovoProfessor novoProfessor, BindingResult bindingResult) {
+	public ModelAndView create(@Valid RequisicaoNovoProfessor novoProfessor, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
-			return "redirect:/professor/new";
+			ModelAndView mv = new ModelAndView("professores/new");
+			mv.addObject("statusProfessor", StatusProfessor.values());
+			return mv;
 		} else {
 			Professor professor = novoProfessor.toProfessor();
 			this.professorRepository.save(professor);
-			return "redirect:/professores";
+			return new ModelAndView("redirect:/professores");
 		}
 	}
 	
