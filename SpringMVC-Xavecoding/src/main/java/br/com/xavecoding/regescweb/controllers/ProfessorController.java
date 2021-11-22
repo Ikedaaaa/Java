@@ -73,7 +73,7 @@ public class ProfessorController {
 			
 			return mv;
 		} else {
-			return new ModelAndView("redirect:/professores");
+			return this.buildErrorModelAndView("SHOW ERROR: ", id);
 		}
 	}
 	
@@ -90,7 +90,7 @@ public class ProfessorController {
 			mv.addObject("statusProfessor", StatusProfessor.values());
 			return mv;
 		} else {
-			return new ModelAndView("redirect:/professores");
+			return this.buildErrorModelAndView("EDIT ERROR: ", id);
 		}
 	}
 	
@@ -111,22 +111,32 @@ public class ProfessorController {
 
 				return new ModelAndView("redirect:/professores/" + professor.getId());
 			} else {
-				return new ModelAndView("redirect:/professores");
+				return this.buildErrorModelAndView("UPDATE ERROR: ", id);
 			}
 		}
 	}
 	
 	//Tentar implementar modal perguntando se o usuário tem certeza se deseja excluir o registro;
-	//Tentar implementar uma div que informa que o registro foi deletado com sucesso;
 	//Tentar implementar paginação na lista de professores
 	@GetMapping("/{id}/delete")
-	public String delete(@PathVariable Long id) {
+	public ModelAndView delete(@PathVariable Long id) {
+		ModelAndView mv = new ModelAndView("redirect:/professores");
+		
 		try {
 			this.professorRepository.deleteById(id);
-			return "redirect:/professores/";
+			mv.addObject("mensagem", "Professor #" + id + " deletado com sucesso");
+			mv.addObject("erro", "false");
 		} catch (EmptyResultDataAccessException e) {
-			return "redirect:/professores/";
+			mv = this.buildErrorModelAndView("DELETE ERROR: ", id);
 		}
+		return mv;
+	}
+	
+	private ModelAndView buildErrorModelAndView(String msg, Long id) {
+		ModelAndView mv = new ModelAndView("redirect:/professores");
+		mv.addObject("mensagem", msg + "Professor #" + id + " não encontrado");
+		mv.addObject("erro", "true");
+		return mv;
 	}
 	
 }
