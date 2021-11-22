@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -112,6 +113,19 @@ public class ProfessorController {
 			} else {
 				return new ModelAndView("redirect:/professores");
 			}
+		}
+	}
+	
+	//Tentar implementar modal perguntando se o usuário tem certeza se deseja excluir o registro;
+	//Tentar implementar uma div que informa que o registro foi deletado com sucesso;
+	//Tentar implementar paginação na lista de professores
+	@GetMapping("/{id}/delete")
+	public String delete(@PathVariable Long id) {
+		try {
+			this.professorRepository.deleteById(id);
+			return "redirect:/professores/";
+		} catch (EmptyResultDataAccessException e) {
+			return "redirect:/professores/";
 		}
 	}
 	
