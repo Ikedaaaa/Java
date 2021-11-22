@@ -10,7 +10,7 @@ import br.com.xavecoding.regescweb.models.Professor;
 import br.com.xavecoding.regescweb.models.StatusProfessor;
 
 // É uma classe DTO
-public class RequisicaoNovoProfessor {
+public class RequisicaoFormProfessor {
 	
 	@NotNull
 	@NotBlank
@@ -47,6 +47,12 @@ public class RequisicaoNovoProfessor {
 		professor.setStatus(this.status);
 		
 		return professor;
+	}
+	
+	public void fromProfessor(Professor professor) {
+		this.nome = professor.getNome();
+		this.salario = professor.getSalario();
+		this.status = professor.getStatus();
 	}
 	
 }

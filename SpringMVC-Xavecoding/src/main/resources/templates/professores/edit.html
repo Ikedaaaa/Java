@@ -2,9 +2,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <!-- https://getbootstrap.com/docs/5.1/getting-started/introduction/ -->
 <!-- https://getbootstrap.com/docs/5.1/forms/validation/ -->
-<head th:replace="~{fragmentos :: head('Novo Professor')}"></head>
+<head th:replace="~{fragmentos :: head('Editar Professor#')}"></head>
   <body>
-    <header th:replace="~{fragmentos :: header('Novo Professor')}"></header>
+    <header th:replace="~{fragmentos :: header('Editar Professor#' + ${idprofessor})}"></header>
     <div class="container">
       <div class="container">
         <div class="row">

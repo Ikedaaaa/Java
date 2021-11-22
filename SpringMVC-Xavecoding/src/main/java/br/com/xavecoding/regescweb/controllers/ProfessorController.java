@@ -10,14 +10,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import br.com.xavecoding.regescweb.dto.RequisicaoNovoProfessor;
+import br.com.xavecoding.regescweb.dto.RequisicaoFormProfessor;
 import br.com.xavecoding.regescweb.models.Professor;
 import br.com.xavecoding.regescweb.models.StatusProfessor;
 import br.com.xavecoding.regescweb.repository.ProfessorRepository;
 
 @Controller
+@RequestMapping("/professores")
 public class ProfessorController {
 
 	private ProfessorRepository professorRepository;
@@ -26,7 +28,7 @@ public class ProfessorController {
 		this.professorRepository = professorRepository;
 	}
 
-	@GetMapping("/professores")
+	@GetMapping
 	public ModelAndView index() {
 		
 		List<Professor> professores = this.professorRepository.findAll();
@@ -36,8 +38,8 @@ public class ProfessorController {
 		return mv;
 	}
 	
-	@GetMapping("/professores/new")
-	public ModelAndView newProfessor(RequisicaoNovoProfessor requisicao) {
+	@GetMapping("/new")
+	public ModelAndView newProfessor(RequisicaoFormProfessor requisicao) {
 		ModelAndView mv = new ModelAndView("professores/new");
 		mv.addObject("statusProfessor", StatusProfessor.values());
 		return mv;
@@ -45,8 +47,8 @@ public class ProfessorController {
 	
 	//create(Professor professor) = Web Parameter Tempering
 	//https://docs.jboss.org/hibernate/stable/validator/reference/en-US/html_single/ - 2.3.1 Jakarta Bean Validation Constraints
-	@PostMapping("professores")
-	public ModelAndView create(@Valid RequisicaoNovoProfessor novoProfessor, BindingResult bindingResult) {
+	@PostMapping
+	public ModelAndView create(@Valid RequisicaoFormProfessor novoProfessor, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			ModelAndView mv = new ModelAndView("professores/new");
 			mv.addObject("statusProfessor", StatusProfessor.values());
@@ -58,7 +60,7 @@ public class ProfessorController {
 		}
 	}
 	
-	@GetMapping("professores/{id}")
+	@GetMapping("/{id}")
 	public ModelAndView show(@PathVariable Long id) {
 		Optional<Professor> optional = this.professorRepository.findById(id);
 		
@@ -68,6 +70,23 @@ public class ProfessorController {
 			ModelAndView mv = new ModelAndView("professores/show");
 			mv.addObject("professor", professor);
 			
+			return mv;
+		} else {
+			return new ModelAndView("redirect:/professores");
+		}
+	}
+	
+	@GetMapping("/{id}/edit")
+	public ModelAndView edit(@PathVariable Long id, RequisicaoFormProfessor requisicao) {
+		Optional<Professor> optional = this.professorRepository.findById(id);
+		
+		if(optional.isPresent()) {
+			Professor professor = optional.get();
+			requisicao.fromProfessor(professor);
+		
+			ModelAndView mv = new ModelAndView("professores/edit");
+			mv.addObject("idprofessor", professor.getId());
+			mv.addObject("statusProfessor", StatusProfessor.values());
 			return mv;
 		} else {
 			return new ModelAndView("redirect:/professores");
