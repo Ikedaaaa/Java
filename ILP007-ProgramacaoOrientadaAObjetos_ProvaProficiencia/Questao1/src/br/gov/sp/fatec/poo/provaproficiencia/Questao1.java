@@ -15,7 +15,7 @@ public class Questao1 {
 		
 		System.out.println("Digite o salário de 15 trabalhadores:");
 		for (int i = 0; i < 15; i++) {
-			System.out.print((i+1)+"º trabalhador: ");
+			System.out.print((i+1)+"º trabalhador: R$");
 			salarios[i] = scanner.nextFloat();
 			media += salarios[i];
 		}
