@@ -5,11 +5,11 @@ public class Questao2e3 {
 	public static void main(String[] args) {
 		Bau b1 = new Bau(10.5, 10.5, 10.5);
 		
-		System.out.println("Primeiro baú criado, suas informações são:");
+		System.out.println("Primeiro baÃº criado, suas informaÃ§Ãµes sÃ£o:");
 		printBauInformations(b1);
 		
 		Bau b2 = new Bau(5.89, 10.64, 15.45, "branco");
-		System.out.println("Segundo baú criado, suas informações são:");
+		System.out.println("Segundo baÃº criado, suas informaÃ§Ãµes sÃ£o:");
 		printBauInformations(b2);
 		
 		b1.setAltura(-0.01);
@@ -18,7 +18,7 @@ public class Questao2e3 {
 		b1.pintar("");
 		b1.pintar("laranja");
 		b1.abrir();
-		System.out.println("\nAtributos do primeiro baú foram alterados. Suas novas informações são:");
+		System.out.println("\nAtributos do primeiro baÃº foram alterados. Suas novas informaÃ§Ãµes sÃ£o:");
 		printBauInformations(b1);
 		
 		b2.abrir();
@@ -27,7 +27,7 @@ public class Questao2e3 {
 		b2.setProfundidade(50.46);
 		b2.pintar("azul");
 		b2.fechar();
-		System.out.println("\nAtributos do segundo baú foram alterados. Suas novas informações são:");
+		System.out.println("\nAtributos do segundo baÃº foram alterados. Suas novas informaÃ§Ãµes sÃ£o:");
 		printBauInformations(b2);
 	}
 	
@@ -36,7 +36,7 @@ public class Questao2e3 {
 		System.out.println("Altura: " + bau.getAltura() + " cm");
 		System.out.println("Profundidade: " + bau.getProfundidade() + " cm");
 		System.out.println("Cor: " + bau.getCor());
-		System.out.println("Está aberto? " + (bau.isAberto() ? "Sim\n" : "Não\n"));
+		System.out.println("EstÃ¡ aberto? " + (bau.isAberto() ? "Sim\n" : "NÃ£o\n"));
 	}
 
 }

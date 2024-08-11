@@ -13,9 +13,9 @@ public class Questao1 {
 		int naMedia = 0;
 		int acimaMedia = 0;
 		
-		System.out.println("Digite o sal·rio de 15 trabalhadores:");
+		System.out.println("Digite o sal√°rio de 15 trabalhadores:");
 		for (int i = 0; i < 15; i++) {
-			System.out.print((i+1)+"∫ trabalhador: R$");
+			System.out.print((i+1)+"¬∫ trabalhador: ");
 			salarios[i] = scanner.nextFloat();
 			media += salarios[i];
 		}
@@ -31,10 +31,10 @@ public class Questao1 {
 				acimaMedia++;
 		}
 		
-		System.out.println("\n******** ESTATÕSTICAS ********\n");
-		System.out.println("Pessoas abaixo da mÈdia: " + abaixoMedia);
-		System.out.println("Pessoas acima da mÈdia: " + acimaMedia);
-		System.out.println("Pessoas na mÈdia: " + naMedia);
+		System.out.println("\n******** ESTAT√çSTICAS ********\n");
+		System.out.println("Pessoas abaixo da m√©dia: " + abaixoMedia);
+		System.out.println("Pessoas acima da m√©dia: " + acimaMedia);
+		System.out.println("Pessoas na m√©dia: " + naMedia);
 	}
 
 }

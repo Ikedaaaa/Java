@@ -26,7 +26,7 @@ public class Bau {
 		if (largura > 0)
 			this.largura = largura;
 		else
-			System.out.println("Largura n„o pode ser menor ou igual a 0");
+			System.out.println("Largura n√£o pode ser menor ou igual a 0");
 	}
 
 	public double getAltura() {
@@ -36,7 +36,7 @@ public class Bau {
 		if (altura > 0)
 			this.altura = altura;
 		else
-			System.out.println("Altura n„o pode ser menor ou igual a 0");
+			System.out.println("Altura n√£o pode ser menor ou igual a 0");
 	}
 
 	public double getProfundidade() {
@@ -46,7 +46,7 @@ public class Bau {
 		if (profundidade > 0)
 			this.profundidade = profundidade;
 		else
-			System.out.println("Profundidade n„o pode ser menor ou igual a 0");
+			System.out.println("Profundidade n√£o pode ser menor ou igual a 0");
 	}
 
 	public boolean isAberto() {
@@ -64,7 +64,7 @@ public class Bau {
 	}
 	public void pintar(String cor) {
 		if ("".equals(cor))
-			System.out.println("… necess·rio informar uma cor");
+			System.out.println("√â necess√°rio informar uma cor");
 		else
 			this.cor = cor;
 	}
